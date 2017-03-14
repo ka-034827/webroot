@@ -5,7 +5,7 @@ The below mentioned files are included as part of this demonstration setup:
 
 	*  dbBuild.sh		-->	Sqlite3 Database setup file
 	*  INSTALL.txt		-->	This Installation text file
-	*  ReadMe.txt		-->	Readme text file
+	*  README.md		-->	Readme text file
 	*  srdfDBSchema.sql	-->	Sqlite3 Schema file
 	*  srdfile.py		-->	srdfile web-app with python list in-memory datastructure
 	*  srdfnixconfig.nix	-->	Nix environment setup file
