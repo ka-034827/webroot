@@ -1,0 +1,122 @@
+File List
+---------
+
+The below mentioned files are included as part of this demonstration setup:
+
+	*  dbBuild.sh		-->	Sqlite3 Database setup file
+	*  INSTALL.txt		-->	This Installation text file
+	*  ReadMe.txt		-->	Readme text file
+	*  srdfDBSchema.sql	-->	Sqlite3 Schema file
+	*  srdfile.py		-->	srdfile web-app with python list in-memory datastructure
+	*  srdfnixconfig.nix	-->	Nix environment setup file
+	*  srdwdbfile.py	-->	srdfile web-app with sqlite3 database
+
+
+NIX - Environment Setup
+-----------------------
+
+Include the nix environment setup file "srdfnixconfig.nix" into your NIXOX '/etc/nixos/configuration.nix' file, 
+
+And rebuild environment to include the required packages.
+
+Use below commands to rebuild nix environment:
+
+To test the new environment before switch over, as root user run:
+
+nixos-rebuild test --show-trace
+
+If no errors are reported, to switch over to the newly built environment, as root user run:
+
+nixos-rebuild switch 
+
+If rebuilding nix environment is not an option, Please ensure availability of the below mentioned packages:
+
+	*  python (v 2.7)	
+	*  python-flask
+	*  sqlite (v3)
+	*  curl
+
+To install these minimum packages, as a normal user execute the below steps:
+
+nix-env -i python 
+nix-env -i python27Packages.flask
+nix-env -i python27Packages.Sqlite3
+
+Now to test the availability of these above installed packages, run the below commands as a normal user:
+
+nix-shell -p python27Packages.flask python27Packages.sqlite3 --run python
+
+{ This would invoke the python shell, type import flask, sqlite3, if imports without errors, then the nix environment is now ready for use }
+
+
+Database Setup
+--------------
+
+As root user enable execute permissions for '.sh' and '.py' files, as shown below:
+
+chmod 744 'dbBuild.sh'
+
+chmod 744 srdf*.py'
+
+And change ownership of the files to your user account name, as shown below:
+
+chown <username>.users *.*
+
+Now execute dbBuild.sh to setup 
+
+Starting the web-app
+--------------------
+
+Execute "srdfile.py" for an in-memory (temporary) HTTP API file operations demonstration as below:
+
+./srdfile.py
+
+This would start a python-flask test web-server on port "8080", exposing the file operations APIs.
+
+{ This test web-server is not valid for a production setup  and needs to be replaced by a production ready real-world web-server like Apache-httpd }
+
+Press Ctrl + c keys to stop the web-application.
+
+Execute "srdwdbfile.py" for a database (sqlite3 DB) HTTP API file operations demonstration as below:
+
+./srdwdbfile.py
+
+Similar to the above step, this would also start off a python-flask test web-server on port "8080", exposing the file operations APIs.
+
+Press Ctrl + c keys to stop the web-application.
+
+
+Testing HTTP API file operations
+--------------------------------
+
+Please use "curl" package for testing as below:
+
+To use GET Method -  To Retrieve file list	
+
+curl -X GET  http://localhost:8080/flist/all
+
+To use GET Method -  To Retrieve an uploaded file by name
+
+curl -X GET  http://localhost:8080/flist/<filename>
+
+To use POST Method - To Upload a new file
+
+curl -i -H "Content-Type: application/json" -X POST -d '{"name": "<filename>"}'
+
+To use DELETE Method - To Delete an uploaded file by name
+
+curl -i -X DELETE  http://localhost:8080/flist/<filename>
+
+or
+
+curl -i -H "Content-Type: application/json" -X DELETE  http://localhost:8080/flist/<filename>
+
+
+Additional Info
+---------------
+
+For additional information please read the script files' comments.
+
+
+
+
